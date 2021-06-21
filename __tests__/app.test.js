@@ -30,4 +30,12 @@ describe('order routes', () => {
 
     expect(res.body).toEqual([orderOne, orderTwo]);
   });
+
+  it('finds an order by id', async () => {
+    const order = await Order.insert({
+      quantity: '10'
+    });
+    const res = await request(app).get(`/api/v1/orders/${order.id}`);
+    expect(res.body).toEqual(order);
+  });
 });
