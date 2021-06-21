@@ -2,6 +2,7 @@ import pool from '../lib/utils/pool.js';
 import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
+import Order from '../lib/models/Order.js';
 
 
 describe('order routes', () => {
@@ -9,7 +10,7 @@ describe('order routes', () => {
     return setup(pool);
   });
 
-  it('creates an order with POST', async () => {
+  it('creates an order with POST and sends a text message', async () => {
     const res = await request(app)
       .post('/api/v1/orders')
       .send({
@@ -19,5 +20,13 @@ describe('order routes', () => {
       id: 1,
       quantity: 4
     });
+  });
+  
+  it('finds an order by id via GET', async () => {
+    const order = await Order.insert({
+      quantity: '10'
+    });
+    const res = await request(app).get(`/api/v1/orders/${order.id}`);
+    expect(res.body).toEqual(order);
   });
 });
