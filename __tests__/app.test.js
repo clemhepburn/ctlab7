@@ -61,4 +61,16 @@ describe('order routes', () => {
     expect(res.body).toEqual(newOrder);
   });
 
+  it('deletes an item and sends an sms', async () => {
+
+    const order = await Order.insert({
+      quantity: 6
+    });
+
+    const res = await request(app)
+      .delete(`/api/v1/orders/${order.id}`);
+
+    expect(res.body).toEqual(order);
+  });
+
 });
