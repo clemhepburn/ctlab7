@@ -39,22 +39,26 @@ describe('order routes', () => {
     expect(res.body).toEqual(order);
   });
 
-  it('updates an order and sends sms', async () => {
-    const existingOrder = await Order.insert({
+  it('updates an order and sends a text', async () => {
+
+    const order = await Order.insert({
       quantity: 5
     });
 
-    const updatedOrder = {
+    order.quantity = 7;
+
+    const newOrder = {
       id: 1,
-      quantity: 6
+      quantity: 7
     };
-
+    
     const res = await request(app)
-      .post(`/api/v1/orders/${existingOrder.id}`)
+      .put(`/api/v1/orders/${order.id}`)
       .send({
-        quantity: 6
+        quantity: 7
       });
-
-    expect(res.body).toEqual(updatedOrder);
+    
+    expect(res.body).toEqual(newOrder);
   });
+
 });
